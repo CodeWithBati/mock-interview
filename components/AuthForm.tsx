@@ -7,6 +7,7 @@ import { useForm } from "react-hook-form";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "sonner";
+import FormField from "./FormField";
 
 const authFormSchema = (type: FormType) => {
   return z.object({
@@ -61,9 +62,29 @@ const AuthForm = ({ type }: { type: FormType }) => {
             onSubmit={form.handleSubmit(onSubmit)}
             className="space-y-6 w-full mt-4 form"
           >
-            {!isSignIn && <p>Name</p>}
-            <p>Email</p>
-            <p>Password</p>
+            {!isSignIn && (
+              <FormField
+                name="name"
+                label="Name"
+                control={form.control}
+                type="text"
+                placeholder="your name"
+              />
+            )}
+            <FormField
+              name="email"
+              label="Email"
+              control={form.control}
+              type="email"
+              placeholder="Email"
+            />
+            <FormField
+              name="password"
+              label="Password"
+              control={form.control}
+              type="password"
+              placeholder="Password"
+            />
 
             <Button className="btn" type="submit">
               {isSignIn ? "Sign In" : "Create An Account"}
