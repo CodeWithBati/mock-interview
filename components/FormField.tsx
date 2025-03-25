@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  FormControl,
-  FormDescription,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "./ui/form";
+import { FormControl, FormItem, FormLabel, FormMessage } from "./ui/form";
 import { Input } from "./ui/input";
 import { Control, Controller, FieldValues, Path } from "react-hook-form";
 
@@ -29,9 +23,14 @@ const FormField = <T extends FieldValues>({
     control={control}
     render={({ field }) => (
       <FormItem>
-        <FormLabel>{label}</FormLabel>
+        <FormLabel className="label">{label}</FormLabel>
         <FormControl>
-          <Input placeholder={placeholder} />
+          <Input
+            className="input"
+            placeholder={placeholder}
+            type={type}
+            {...field}
+          />
         </FormControl>
         <FormMessage />
       </FormItem>
