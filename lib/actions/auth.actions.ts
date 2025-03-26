@@ -21,6 +21,11 @@ export async function SignUp(prams: SignUpParams) {
       name,
       email,
     });
+
+    return {
+      success: true,
+      message: "User created successfully",
+    };
   } catch (error: any) {
     console.log("error while creating a user", error);
     if (error.code === "auth/email-already-in-use") {
@@ -43,10 +48,19 @@ export async function SignIn(params: SignInParams) {
   try {
     const userRecord = await auth.getUserByEmail(email);
 
-    
+    if (!userRecord) {
+      return {
+        success: false,
+        message: "User not found",
+      };
+    }
 
+    await setSessionCookie(idToken);
 
-
+    return {
+      success: true,
+      message: "Login successful",
+    };
   } catch (error) {
     console.log(error);
     return {
@@ -70,4 +84,39 @@ export async function setSessionCookie(idToken: string) {
     path: "/",
     sameSite: "lax",
   });
+}
+
+export async function getCurrentUser(): Promise<User | null> {
+  const cookieStore = await cookies();
+
+  const sessionCookie = cookieStore.get("session")?.value;
+
+  if (!sessionCookie) {
+    return null;
+  }
+
+  try {
+    const decodedClaims = await auth.verifySessionCookie(sessionCookie, true);
+
+    const userRecord = await db
+      .collection("users")
+      .doc(decodedClaims.uid)
+      .get();
+
+    if (!userRecord.exists) return null;
+
+    return {
+      ...userRecord.data(),
+      id: userRecord.id,
+    } as User;
+  } catch (error) {
+    console.log("error", error);
+    return null;
+  }
+}
+
+export async function isAuthenticated() {
+  const user = await getCurrentUser();
+
+  return !!user;
 }
