@@ -27,6 +27,8 @@ const page = () => {
           height={500}
           className="max-sm:hidden"
         />
+
+        
       </section>
       <section className="flex flex-col gap-6 mt-8">
         <h2>Your Interviews</h2>

@@ -120,3 +120,12 @@ export async function isAuthenticated() {
 
   return !!user;
 }
+
+export async function SignOut() {
+  const cookieStore = await cookies();
+  cookieStore.delete("session");
+  return {
+    success: true,
+    message: "Logout successful",
+  };
+}
