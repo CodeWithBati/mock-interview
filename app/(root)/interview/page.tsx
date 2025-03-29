@@ -4,7 +4,7 @@ import React from 'react'
 const page = () => {
   return (
    <>
-   <h3>Interview</h3>
+   <h3>Interview Generation</h3>
    <Agent userName='You' userId='user1' type="generate" />
    </>
   )
