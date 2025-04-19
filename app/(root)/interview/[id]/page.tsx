@@ -12,7 +12,6 @@ const page = async ({ params }: RouteParams) => {
   const user = await getCurrentUser();
   const interview = await getInterviewById(id);
 
-  console.log(interview);
   if (!interview) redirect("/");
 
   return (
@@ -38,7 +37,7 @@ const page = async ({ params }: RouteParams) => {
 
       <Agent
         userName={user?.name || "Guest"}
-        userId={interview.userId}
+        userId={user?.id}
         interviewId={id}
         type="interview"
         questions={interview.questions}

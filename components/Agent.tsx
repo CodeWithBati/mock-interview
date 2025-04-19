@@ -78,7 +78,7 @@ const Agent = ({
       };
 
       if (success && id) {
-        router.push(`/interview/${interviewId}`);
+        router.push(`/interview/${interviewId}/feedback`);
       } else {
         console.log("error on saving");
         router.push("/");
