@@ -1,8 +1,8 @@
 "use server";
-
-import { auth, db } from "@/firebase/admin";
+import { auth, db, storage } from "@/firebase/admin";
 import { cookies } from "next/headers";
 const ONE_WEEK = 60 * 60 * 24 * 7;
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 
 export async function SignUp(prams: SignUpParams) {
   const { uid, name, email } = prams;
@@ -20,6 +20,7 @@ export async function SignUp(prams: SignUpParams) {
     await db.collection("users").doc(uid).set({
       name,
       email,
+      photoURL: "/user-avatar.png", // Default avatar
     });
 
     return {
@@ -130,3 +131,60 @@ export async function SignOut() {
   };
 }
 
+export async function updateUserProfile(uid: string, formData: FormData) {
+  try {
+    const name = formData.get("name") as string;
+    const photo = formData.get("photo") as File | null;
+    let photoURL: string | null = null;
+
+    // Server-side file size validation
+    if (photo && photo.size > MAX_FILE_SIZE) {
+      return {
+        success: false,
+        error: "Image must be under 5MB",
+      };
+    }
+
+    if (photo && photo.size > 0) {
+      const bucket = storage.bucket();
+      const fileName = `profile-pictures/${uid}-${Date.now()}`;
+      const file = bucket.file(fileName);
+
+      // Convert File to Buffer
+      const arrayBuffer = await photo.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+
+      await file.save(buffer, {
+        metadata: {
+          contentType: photo.type,
+        },
+      });
+
+      // Get public URL
+      photoURL = await file
+        .getSignedUrl({
+          action: "read",
+          expires: "03-09-2491", // Long expiration for profile pictures
+        })
+        .then((urls: string[]) => urls[0]);
+    }
+
+    const updateData: Partial<User> = { name };
+    if (photoURL) {
+      updateData.photoURL = photoURL;
+    }
+
+    await db.collection("users").doc(uid).update(updateData);
+
+    return {
+      success: true,
+      message: "Profile updated successfully",
+    };
+  } catch (error: any) {
+    console.log("Error updating profile:", error);
+    return {
+      success: false,
+      error: error.message || "Failed to update profile",
+    };
+  }
+}

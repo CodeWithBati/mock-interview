@@ -1,6 +1,7 @@
 import { cert, getApps, initializeApp } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
 import { getFirestore } from "firebase-admin/firestore";
+import { getStorage } from "firebase-admin/storage";
 
 const initFirebaseAdmin = () => {
   const apps = getApps();
@@ -12,13 +13,15 @@ const initFirebaseAdmin = () => {
         clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
         privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
       }),
+      storageBucket: "prepwise-my.firebasestorage.app", // Your storage bucket
     });
   }
 
-  return {
+  return {  
     auth: getAuth(),
     db: getFirestore(),
+    storage: getStorage(),
   };
 };
 
-export const { auth, db } = initFirebaseAdmin();
+export const { auth, db, storage } = initFirebaseAdmin();
