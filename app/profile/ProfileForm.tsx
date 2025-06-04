@@ -25,7 +25,6 @@ export default function ProfileForm({ user }: ProfileFormProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Client-side file size validation
     if (file && file.size > MAX_FILE_SIZE) {
       toast.error("Image must be under 5MB");
       return;
@@ -41,7 +40,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
       const result = await updateUserProfile(user.id, formData);
       if (result.success) {
         toast.success("Profile updated successfully");
-        router.refresh(); // Refresh to update navbar image
+        router.refresh();
       } else {
         toast.error(result.error || "Failed to update profile");
       }
@@ -64,7 +63,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
           id="name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="mt-1 block w-full border border-gray-300 rounded-md p-2 focus:ring-primary-100 focus:border-primary-100"
+          className="mt-1 block w-full border text-gray-900 border-gray-300 rounded-md p-2 focus:ring-primary-100 focus:border-primary-100"
           required
         />
       </div>

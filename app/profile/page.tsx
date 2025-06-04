@@ -24,7 +24,9 @@ export default async function ProfilePage() {
             className="rounded-full object-cover size-[80px]"
           />
           <div>
-            <h2 className="text-lg font-semibold">{user.name || "User"}</h2>
+            <h2 className="text-lg font-semibold text-gray-700">
+              {user.name || "User"}
+            </h2>
             <p className="text-gray-600">{user.email}</p>
           </div>
         </div>

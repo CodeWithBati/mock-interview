@@ -20,6 +20,7 @@ const InterviewCard = async ({
     id && userId
       ? await getFeedbackByInterviewId({ interviewId: id, userId })
       : null;
+
   const normalizedType = /mix/gi.test(type) ? "Mixed" : type;
 
   const badgeColor =
