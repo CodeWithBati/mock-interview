@@ -82,7 +82,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
           className="mt-1 block w-full border text-gray-800 border-gray-300 rounded-md p-2 bg-gray-100"
         />
       </div>
-      <div>
+      {/* <div>
         <label
           htmlFor="photo"
           className="block text-sm font-medium text-gray-700"
@@ -96,7 +96,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
           onChange={(e) => setFile(e.target.files?.[0] || null)}
           className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:bg-primary-100 file:text-white hover:file:bg-primary-200"
         />
-      </div>
+      </div> */}
       <button
         type="submit"
         className="w-full bg-primary-100 hover:bg-primary-200 text-white py-2 px-4 rounded-md transition"
