@@ -1,6 +1,5 @@
 import InterviewCard from "@/components/InterviewCard";
 import { Button } from "@/components/ui/button";
-import { dummyInterviews } from "@/constants";
 import { getCurrentUser } from "@/lib/actions/auth.actions";
 import {
   getInterviewByUserId,
@@ -14,8 +13,8 @@ const page = async () => {
   const user = await getCurrentUser();
 
   const [userInterviews, latestInterview] = await Promise.all([
-    (await getInterviewByUserId(user?.id!)) || [],
-    (await latestInterviews({ userId: user?.id! })) || [],
+    (await getInterviewByUserId(user?.id ?? "")) || [],
+    (await latestInterviews({ userId: user?.id ?? "" })) || [],
   ]);
 
   const hasPastInterviews = userInterviews?.length > 0;

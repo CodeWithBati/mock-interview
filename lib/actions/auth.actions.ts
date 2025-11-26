@@ -27,9 +27,13 @@ export async function SignUp(prams: SignUpParams) {
       success: true,
       message: "User created successfully",
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.log("error while creating a user", error);
-    if (error.code === "auth/email-already-in-use") {
+    if (
+      error instanceof Error &&
+      "code" in error &&
+      error.code === "auth/email-already-in-use"
+    ) {
       return {
         error: "Email already in use",
         success: false,
@@ -37,7 +41,8 @@ export async function SignUp(prams: SignUpParams) {
     }
 
     return {
-      error: error.message,
+      error:
+        error instanceof Error ? error.message : "An unexpected error occurred",
       success: false,
     };
   }
@@ -180,11 +185,12 @@ export async function updateUserProfile(uid: string, formData: FormData) {
       success: true,
       message: "Profile updated successfully",
     };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.log("Error updating profile:", error);
     return {
       success: false,
-      error: error.message || "Failed to update profile",
+      error:
+        error instanceof Error ? error.message : "Failed to update profile",
     };
   }
 }

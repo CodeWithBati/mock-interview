@@ -45,6 +45,7 @@ export default function ProfileForm({ user }: ProfileFormProps) {
         toast.error(result.error || "Failed to update profile");
       }
     } catch (error) {
+      console.error("Error updating profile:", error);
       toast.error("An error occurred");
     }
   };
